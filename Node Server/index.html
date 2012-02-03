@@ -1,0 +1,76 @@
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
+<script>
+
+
+  var socket = io.connect('http://127.0.0.1:3000');
+  socket.on('news', function (data) {
+	data = data.hello;
+	console.log(data);
+	var html = "";
+	for (i in data) {
+		html += "<div class='" + getDataType(data[i]) + "'>" + data[i] + "</div></br>";
+	}
+	$('#log').html(html);
+  });
+
+function getDataType(data) {
+	var myRegexp = /([A-Z])\//;
+	var match = myRegexp.exec(data);
+	if (match !== null) {
+		level = match[1];
+		switch(level) {
+			case 'D':
+				return 'debug';
+				break;
+			case 'W':
+				return 'warn';
+				break;
+			case 'I':
+				return 'info';
+				break;
+			case 'E':
+				return 'error';
+				break;
+		}
+	}
+}
+</script>
+<style>
+	#log {
+		overflow:scroll;
+		height: 90%;
+	}
+
+	.debug {
+		color: blue;
+	}
+
+	.warn {
+		color: orange;
+	}
+
+	.info {
+		color: green;
+	}
+
+	.error {
+		color: red;
+	}
+</style>
+<body>
+<div id="log">
+</div>
+<div id="options">
+	<label for="warnbox">Warn:</label>
+	<input type="checkbox" id="warnbox"/>
+	<label for="debugbox">Debug:</label>
+	<input type="checkbox" id="debugbox"/>
+	<label for="infobox">Info:</label>
+	<input type="checkbox" id="infobox"/>
+	<label for="errorbox">Error:</label>
+	<input type="checkbox" id="errorbox"/>
+	<label for="verbosebox">Verbose:</label>
+	<input type="checkbox" id="verbosebox"/>
+</div>
+</body>
